@@ -11,10 +11,10 @@ const client = new Client({
   ],
 });
 
-const verificationChannelId = '824796147733626904'; // Replace with your verification channel ID
+const verificationChannelId = '824796147733626904'; 
 const csvFileUrl = 'https://mydoornumber.co.uk/wp-content/plugins/orders-to-csv/orders_export.csv';
 
-const usedOrdersFile = 'used_orders.csv'; // New CSV file to keep track of used orders
+const usedOrdersFile = 'used_orders.csv'; 
 const usedOrders = [];
 const orders = [];
 
@@ -66,21 +66,18 @@ const commands = [
     async execute(interaction) {
       const orderNumber = interaction.options.getString('ordernumber');
 
-      // Wait for the used orders to be processed
       await processCSVFile(usedOrdersFile, usedOrders);
 
-      // Validate the order number against the local CSV file
       const isValidOrder = await validateOrderNumber(orderNumber);
 
       if (isValidOrder) {
-        // Check if the order number has already been used
+
         const isOrderUsed = isOrderNumberUsed(orderNumber);
 
         if (!isOrderUsed) {
-          // Mark the order number as used in the local CSV file
+
           markOrderAsUsed(orderNumber);
 
-          // Grant access to the rest of the server
           const member = interaction.member;
           const role = interaction.guild.roles.cache.find((r) => r.name === 'OUTSPKN');
 
@@ -100,7 +97,6 @@ const commands = [
   },
 ];
 
-// Replace 'YOUR_BOT_TOKEN' with your actual bot token
 client.login('');
 
 client.once('ready', () => {
@@ -127,31 +123,26 @@ client.on('interactionCreate', async (interaction) => {
   }
 });
 
-// Function to validate the order number against the local CSV file
 async function validateOrderNumber(orderNumber) {
-  // Wait for the orders to be processed
+
   await processCSVFile('orders.csv', orders);
   return orders.some(order => order.orderNumber === orderNumber);
 }
 
-// Function to check if the order number has already been used
 function isOrderNumberUsed(orderNumber) {
   const order = usedOrders.find(order => order.orderNumber === orderNumber);
   return order && order.used === '1';
 }
 
-// Function to mark the order number as used in the local CSV file
 function markOrderAsUsed(orderNumber) {
   const orderIndex = orders.findIndex(order => order.orderNumber === orderNumber);
 
   if (orderIndex !== -1) {
-    // Mark the order as used in the orders array
+
     orders[orderIndex].used = '1';
 
-    // Add the used order to the usedOrders array
     usedOrders.push({ orderNumber, used: '1' });
 
-    // Write the updated data back to the used_orders CSV file
     const csvDataUsedOrders = usedOrders.map(order => `${order.orderNumber},${order.used}`).join('\n');
     fs.writeFileSync(usedOrdersFile, `${csvDataUsedOrders}`, 'utf-8');
 
