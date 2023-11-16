@@ -101,7 +101,7 @@ const commands = [
 ];
 
 // Replace 'YOUR_BOT_TOKEN' with your actual bot token
-client.login('MTE3NDM2NzE1MDk2Njg0OTYyNw.GgN91c.n7Z12370IMT18PC5fuLzm6BD1jHBuzowCV8gOk');
+client.login('');
 
 client.once('ready', () => {
   console.log(`Logged in as ${client.user.tag}`);
